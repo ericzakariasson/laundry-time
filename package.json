@@ -1,0 +1,31 @@
+{
+  "name": "laundry-time",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "ts-node-dev --respawn src/index.ts"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ericzakariasson/laundry-time.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ericzakariasson/laundry-time/issues"
+  },
+  "homepage": "https://github.com/ericzakariasson/laundry-time#readme",
+  "devDependencies": {
+    "@types/node": "^12.12.14",
+    "@types/puppeteer": "^2.0.0",
+    "ts-node-dev": "^1.0.0-pre.44",
+    "typescript": "^3.7.3"
+  },
+  "dependencies": {
+    "date-fns": "^2.8.1",
+    "puppeteer": "^2.0.0"
+  }
+}
