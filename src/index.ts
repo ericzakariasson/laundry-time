@@ -1,14 +1,17 @@
-import puppeteer from "puppeteer";
+import * as puppeteer from "puppeteer";
 import { baseUrl, preferences } from "./constants";
 import { tryBookLaundryRoom } from "./book-laundry";
-import dotenv from "dotenv";
+import * as dotenv from "dotenv";
 
 dotenv.config();
 
 const headless = false;
+const isProduction = process.env.NODE_ENV === "production";
 
-const start = async () => {
-  const browser = await puppeteer.launch({ headless });
+export const bookLaundryRoom = async () => {
+  const browser = await puppeteer.launch({
+    headless: isProduction ? true : headless
+  });
   const page = await browser.newPage();
 
   await page.goto(`${baseUrl}`);
@@ -27,10 +30,8 @@ const start = async () => {
   if (hasBooking) {
     console.log("Time already booked");
     await browser.close();
-    process.exit(0);
+    return;
   }
 
   tryBookLaundryRoom(page, preferences);
 };
-
-start();

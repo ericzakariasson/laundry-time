@@ -19,14 +19,18 @@
   },
   "homepage": "https://github.com/ericzakariasson/laundry-time#readme",
   "devDependencies": {
+    "@types/aws-lambda": "^8.10.36",
     "@types/node": "^12.12.14",
     "@types/puppeteer": "^2.0.0",
+    "serverless-offline": "^5.12.1",
+    "serverless-plugin-typescript": "^1.1.9",
     "ts-node-dev": "^1.0.0-pre.44",
     "typescript": "^3.7.3"
   },
   "dependencies": {
     "date-fns": "^2.8.1",
     "dotenv": "^8.2.0",
-    "puppeteer": "^2.0.0"
+    "puppeteer": "^2.0.0",
+    "source-map-support": "^0.5.16"
   }
 }
