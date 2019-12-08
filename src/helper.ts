@@ -1,6 +1,6 @@
 import { addWeeks, addHours, startOfWeek, addDays, format } from "date-fns";
 import { sv } from "date-fns/locale";
-import { days, periods, rooms, BookingOptions } from "./constants";
+import { days, periods, rooms, BookingOptions, Room, Day } from "./constants";
 
 export const getBookingUrl = ({ period, day, room }: BookingOptions) => {
   const today = new Date();
@@ -27,3 +27,5 @@ export const getBookingUrl = ({ period, day, room }: BookingOptions) => {
     laundryDate: passDate
   };
 };
+
+export const sortByRank = (a: Room | Day, b: Room | Day) => a.rank - b.rank;

@@ -1,17 +1,7 @@
-import { getBookingUrl } from "./helper";
-import {
-  baseUrl,
-  rooms,
-  days,
-  preferences,
-  BookingOptions,
-  Room,
-  Day
-} from "./constants";
+import { getBookingUrl, sortByRank } from "./helper";
+import { baseUrl, rooms, days, preferences, BookingOptions } from "./constants";
 import { format } from "date-fns";
 import { Page } from "puppeteer";
-
-const sortByRank = (a: Room | Day, b: Room | Day) => a.rank - b.rank;
 
 export const tryBookLaundryRoom = async (
   page: Page,
@@ -33,7 +23,7 @@ export const tryBookLaundryRoom = async (
 
       if (currentDayIndex === orderedDays.length - 1) {
         console.log(`No room bookable`);
-        process.exit(0);
+        return;
       }
 
       const nextDay = orderedDays[currentDayIndex + 1];
