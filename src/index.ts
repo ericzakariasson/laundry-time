@@ -1,13 +1,14 @@
-import * as puppeteer from "puppeteer-core";
 import { baseUrl, preferences } from "./constants";
 import { tryBookLaundryRoom } from "./book-laundry";
-import { getChrome } from "./chrome";
 import { Page } from "puppeteer-core";
+import * as chromium from "chrome-aws-lambda";
 
 export const bookLaundryRoom = async () => {
-  const chrome = await getChrome();
-  const browser = await puppeteer.connect({
-    browserWSEndpoint: chrome.endpoint
+  const browser = await chromium.puppeteer.launch({
+    args: chromium.args,
+    defaultViewport: chromium.defaultViewport,
+    executablePath: await chromium.executablePath,
+    headless: chromium.headless
   });
 
   console.log("Connected to Chrome");
@@ -28,8 +29,6 @@ export const bookLaundryRoom = async () => {
   await page.click('[aria-label="Boka"]');
 
   await page.waitForSelector("#btnNewBooking");
-  await page.waitForSelector('button[title="Avboka"');
-
   const hasBooking = (await page.$('button[title="Avboka"]')) !== null;
 
   if (hasBooking) {
@@ -38,25 +37,21 @@ export const bookLaundryRoom = async () => {
     return "Time already booked";
   }
 
-  return "Got this far";
+  const response = await tryBookLaundryRoom(page, preferences);
+  await browser.close();
 
-  tryBookLaundryRoom(page, preferences);
+  return response;
 };
 
 const tryLogin = async (page: Page) => {
   console.log("Trying to login");
 
-  await page.waitForSelector("#UserName", { timeout: 10000 });
-  console.log("Found username field");
-  await page.type("#UserName", process.env.USERNAME as string);
+  await page.waitForSelector("#UserName");
+  await page.type("#UserName", process.env.PAGE_USERNAME as string);
 
-  await page.waitForSelector("#Password", { timeout: 2000 });
-  console.log("Found password field");
-  await page.type("#Password", process.env.PASSWORD as string);
+  await page.waitForSelector("#Password");
+  await page.type("#Password", process.env.PAGE_PASSWORD as string);
 
-  await page.waitForSelector("#btnLogin", { timeout: 2000 });
-  console.log("Found login button");
+  await page.waitForSelector("#btnLogin");
   await page.click("#btnLogin");
-
-  console.log("Logged in");
 };

@@ -6,7 +6,7 @@ import { Page } from "puppeteer";
 export const tryBookLaundryRoom = async (
   page: Page,
   { day, period, room }: BookingOptions
-): Promise<void> => {
+): Promise<string> => {
   console.log(`Trying to book room ${room} for ${day} at ${period} `);
 
   const { bookingUrl, laundryDate } = getBookingUrl({ day, period, room });
@@ -25,7 +25,7 @@ export const tryBookLaundryRoom = async (
 
       if (currentDayIndex === orderedDays.length - 1) {
         console.log(`No room bookable`);
-        return;
+        return `No room bookable`;
       }
 
       const nextDay = orderedDays[currentDayIndex + 1];
@@ -55,13 +55,15 @@ export const tryBookLaundryRoom = async (
   const isBooked = isBookedRegex.test(popupMessage || "");
 
   if (isBooked) {
-    console.log(
-      `Laundry room ${
-        room.name
-      } is booked on next ${day.name.toLowerCase()} (${format(
-        laundryDate,
-        "yyyy-MM-dd"
-      )}) ${period}`
-    );
+    const msg = `Laundry room ${
+      room.name
+    } is booked on next ${day.name.toLowerCase()} (${format(
+      laundryDate,
+      "yyyy-MM-dd"
+    )}) ${period}`;
+    console.log(msg);
+    return msg;
   }
+
+  return "";
 };

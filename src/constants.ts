@@ -84,7 +84,7 @@ export interface BookingOptions {
 }
 
 export const preferences: BookingOptions = {
-  day: days.find(day => day.name === "Måndag")!,
-  period: "19-22",
+  day: days.find(day => day.name === "Onsdag")!,
+  period: "16-19",
   room: rooms.find(room => room.rank === 0)!
 };

@@ -4,12 +4,11 @@ service:
 plugins:
   - serverless-offline
   - serverless-plugin-typescript
-  - serverless-plugin-chrome
   - serverless-dotenv-plugin
 
 provider:
   name: aws
-  runtime: nodejs8.10
+  runtime: nodejs12.x
   region: eu-north-1
   apiGateway:
     minimumCompressionSize: 1024 # Enable gzip compression for responses > 1 KB
