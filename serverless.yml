@@ -23,6 +23,7 @@ functions:
       - http:
           method: get
           path: bookLaundry
+      - schedule: cron(30 20 * * *)
 
 package:
   exclude:
