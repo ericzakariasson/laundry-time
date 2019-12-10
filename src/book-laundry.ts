@@ -7,6 +7,8 @@ export const tryBookLaundryRoom = async (
   page: Page,
   { day, period, room }: BookingOptions
 ): Promise<void> => {
+  console.log(`Trying to book room ${room} for ${day} at ${period} `);
+
   const { bookingUrl, laundryDate } = getBookingUrl({ day, period, room });
 
   await page.goto(`${baseUrl}/${bookingUrl}`);
