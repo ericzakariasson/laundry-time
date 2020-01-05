@@ -3,13 +3,31 @@ import { baseUrl, rooms, days, preferences, BookingOptions } from "./constants";
 import { format } from "date-fns";
 import { Page } from "puppeteer";
 
+interface BookingResult {
+  booked: boolean;
+  message: string;
+  options: BookingOptions;
+  date: Date;
+}
+
 export const tryBookLaundryRoom = async (
   page: Page,
   { day, period, room }: BookingOptions
-): Promise<string> => {
-  console.log(`Trying to book room ${room} for ${day} at ${period} `);
+): Promise<BookingResult> => {
+  console.log(
+    `Trying to book room ${
+      room.name
+    } for ${day.name.toLocaleLowerCase()} at ${period} `
+  );
 
   const { bookingUrl, laundryDate } = getBookingUrl({ day, period, room });
+
+  const response = (booked: boolean, message: string): BookingResult => ({
+    options: { day, period, room },
+    booked,
+    message,
+    date: laundryDate
+  });
 
   await page.goto(`${baseUrl}/${bookingUrl}`);
 
@@ -25,7 +43,7 @@ export const tryBookLaundryRoom = async (
 
       if (currentDayIndex === orderedDays.length - 1) {
         console.log(`No room bookable`);
-        return `No room bookable`;
+        return response(false, `No room bookable`);
       }
 
       const nextDay = orderedDays[currentDayIndex + 1];
@@ -62,8 +80,8 @@ export const tryBookLaundryRoom = async (
       "yyyy-MM-dd"
     )}) ${period}`;
     console.log(msg);
-    return msg;
+    return response(true, msg);
   }
 
-  return "";
+  return response(false, "");
 };

@@ -31,6 +31,7 @@
   "dependencies": {
     "chrome-aws-lambda": "^2.0.1",
     "date-fns": "^2.8.1",
+    "googleapis": "^46.0.0",
     "puppeteer-core": "^2.0.0",
     "source-map-support": "^0.5.16"
   }

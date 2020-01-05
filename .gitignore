@@ -11,3 +11,4 @@ jspm_packages
 .env
 .build
 .DS_Store
+auth.json

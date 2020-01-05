@@ -3,6 +3,9 @@ import { tryBookLaundryRoom } from "./book-laundry";
 import { Page } from "puppeteer-core";
 import * as chromium from "chrome-aws-lambda";
 
+import { calendar } from "./calendar";
+import { addHours, format } from "date-fns";
+
 export const bookLaundryRoom = async () => {
   const browser = await chromium.puppeteer.launch({
     args: chromium.args,
@@ -39,6 +42,27 @@ export const bookLaundryRoom = async () => {
 
   const response = await tryBookLaundryRoom(page, preferences);
   await browser.close();
+
+  if (response.booked) {
+    calendar.events.insert({
+      calendarId: "primary",
+      requestBody: {
+        summary: `Laundry Time ${response.options.period} ${
+          response.options.room.name
+        } (${format(response.date, "yyyy-MM-dd")})`,
+        location: `${response.options.room.name}`,
+        start: {
+          dateTime: response.date.toISOString(),
+          timeZone: "Europe/Stockholm"
+        },
+        end: {
+          dateTime: addHours(response.date, 4).toISOString(),
+          timeZone: "Europe/Stockholm"
+        },
+        attendees: [{ email: process.env.MAIL_TO }]
+      }
+    });
+  }
 
   return response;
 };
